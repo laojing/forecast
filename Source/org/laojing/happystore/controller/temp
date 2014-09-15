@@ -1,0 +1,120 @@
+
+
+	@RequestMapping(value="overall", method=RequestMethod.GET)
+	public String overAll(ModelMap model,HttpSession session){
+		return "overall";
+	}
+
+	@RequestMapping(value="plans", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getOverall() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("plans", storeDao.getPlans());
+		return map;
+	}
+	
+	@RequestMapping(value="html", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getUnit(@RequestParam("geturl") String geturl) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		InputStream inputStream = null;
+		String result = ""; 
+		
+		BufferedReader br = null;
+		StringBuffer buffer = null;
+		try{   
+			inputStream = servletContext.getResourceAsStream("/WEB-INF/Html/"+geturl+".jsp");  
+			
+			buffer = new StringBuffer();   
+			InputStreamReader isr = new InputStreamReader(inputStream,"utf-8");   
+			br = new BufferedReader(isr);    
+			int s;   
+			while((s = br.read())!=-1){    
+				buffer.append((char)s);   
+			}   
+			result = buffer.toString();
+		}catch(Exception e){  
+			e.printStackTrace();  		
+		}
+		
+		map.put("html", result);		
+		return map;
+	}
+	
+	@RequestMapping(value="/update", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getUpdate(@RequestParam("geturl") String geturl) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("html", "更新成功!!!");
+
+		return map;
+	}
+	
+	
+	@RequestMapping(value="/unitinfo", method=RequestMethod.GET)
+	public @ResponseBody Map<String,String> getUnitInfo(@RequestParam("geturl") String geturl) {
+		return storeDao.getUnitInfo ( geturl );
+	}
+
+	@RequestMapping(value="/deleteattach", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> deleteAttach(
+			@RequestParam("id") String id,
+			@RequestParam("filename") String filename,
+			HttpServletRequest request) {
+		Map<String,Object> map = new HashMap<String,Object>();	
+		storeDao.deleteAttach ( id );
+		String savefile = request.getRealPath("") + "/upload/" + filename;
+		File f = new File(savefile);
+		f.delete();
+		map.put("html", "Ok" );
+		return map;
+	}
+	@RequestMapping(value="/saveunitinfo", method=RequestMethod.POST)
+	public @ResponseBody Map<String,Object> getUnitInfo(
+			@RequestParam("geturl") String geturl,
+			@RequestParam("json") String json) {
+		Map<String,Object> map = new HashMap<String,Object>();	
+		String result = storeDao.saveUnitInfo ( geturl, json );
+		map.put("html", "Ok!" );
+		return map;
+	}
+	
+	@RequestMapping(value="/getattach", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getAttach() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("attachs", storeDao.getAttach(16));
+		return map;
+	}
+
+	@RequestMapping(value="/fileupload", method=RequestMethod.POST)
+	public void upLoad(
+			@RequestParam("upfile") CommonsMultipartFile upfile,
+			@RequestParam("attachedType") String attachedType,
+			@RequestParam("attachedName") String attachedName,
+			HttpServletResponse response,
+			HttpServletRequest request) {
+		try{
+			attachedName = new String ( attachedName.getBytes("ISO8859-1"), "UTF-8" );
+			if ( upfile.getSize() > 0 ) {
+				InputStream in = upfile.getInputStream();
+				String filename = upfile.getOriginalFilename();
+				String extension = "";
+				if ( filename.lastIndexOf('.') > 0 ) {
+					extension = filename.substring ( filename.lastIndexOf('.')+1 );
+				} 
+				Date date = new Date();
+				String realname = date.getTime() + "." + extension;
+				String savefile = request.getRealPath("") + "/upload/" + realname;
+				OutputStream out = new FileOutputStream(new File(savefile));
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				while ( ( read = in.read(bytes) ) != -1 ) {
+					out.write ( bytes, 0, read );
+				}
+				storeDao.insertAttach ( 16, attachedType, attachedName, realname, extension );
+			}
+			response.setContentType("text/html");
+			response.getWriter().write("success");
+		} 
+		catch (UnsupportedEncodingException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}
+	}
+

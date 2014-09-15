@@ -1,0 +1,895 @@
+
+  <div class="section" id="q-gdw-588-2011">
+<div class="section" id="id1">
+<h2>前言</h2>
+<p>根据《关于下达2010年度国家电网公司技术标准编制（修）订计划的通知》（国家电网科〔2010〕320号）的要求，中国电力科学研究院和吉林省电力有限公司开展了《风电功率预测功能规范》的编制工作。</p>
+<p>为进一步提高风电调度运行管理水平，规范电网调度机构和风电场风电功率预测系统的建设，并指导系统的研发、验收和使用，特制订本功能规范。</p>
+<p>本标准由国家电力调度通信中心提出并解释；</p>
+<p>本标准由国家电网公司科技部归口；</p>
+<p>本标准主要起草单位：中国电力科学研究院、吉林省电力有限公司；</p>
+<p>本标准主要起草人：刘纯、裴哲义、王勃、董存、冯双磊、范高锋、范国英、郭雷。</p>
+</div>
+<div class="section" id="id2">
+<h2>范围</h2>
+<p>本标准规定了风电功率预测系统的功能，主要包括术语和定义、预测建模数据准备、数据采集与处理、预测功能要求、统计分析、界面要求、安全防护要求、数据输出及性能要求等。</p>
+<p>本标准适用于电网调度机构和风电场风电功率预测系统的建设，系统的研发、验收和运行可参照使用。</p>
+</div>
+<div class="section" id="id3">
+<h2>规范性引用文件</h2>
+<p>下列文件对于本标准的应用是必不可少的。凡是注日期的引用文件，仅注日期的版本适用于本标准。凡是不注日期的引用文件，其最新版本（包括所有的修改单）适用于本标准。</p>
+<p>Q/GDW 392—2009  风电场接入电网技术规定</p>
+<p>Q/GDW 432—2010  风电调度运行管理规范</p>
+</div>
+<div class="section" id="id4">
+<h2>术语和定义</h2>
+<p>下列术语和定义适用于本文件。</p>
+<div class="section" id="wind-farm">
+<h3>风电场  wind farm</h3>
+<p>由一批风电机组或风电机组群（包括机组单元变压器）、汇集线路、主升压变压器及其他设备组成的发电站。</p>
+</div>
+<div class="section" id="numerical-weather-prediction">
+<h3>数值天气预报　numerical weather prediction</h3>
+<p>根据大气实际情况，在一定的初值和边值条件下，通过大型计算机作数值计算，求解描写天气演变过程的流体力学和热力学方程组，预测未来一定时段的大气运动状态和天气现象的方法。</p>
+</div>
+<div class="section" id="wind-power-forecasting">
+<h3>风电功率预测　wind power forecasting</h3>
+<p>以风电场的历史功率、历史风速、地形地貌、数值天气预报、风电机组运行状态等数据建立风电场输出功率的预测模型，以风速、功率或数值天气预报数据作为模型的输入，结合风电场机组的设备状态及运行工况，预测风电场未来的有功功率。</p>
+</div>
+<div class="section" id="short-term-wind-power-forecasting">
+<h3>短期风电功率预测　short-term wind power forecasting</h3>
+<p>预测风电场次日零时起3天的有功功率，时间分辨率为15min。</p>
+</div>
+<div class="section" id="ultra-short-term-wind-power-forecasting">
+<h3>超短期风电功率预测　ultra-short-term wind power forecasting</h3>
+<p>预测风电场未来0-4h的有功功率，时间分辨率不小于15min。</p>
+</div>
+<div class="section" id="confidence-degree">
+<h3>置信度　confidence degree</h3>
+<p>总体参数值落在样本统计值某一区内的概率。</p>
+</div>
+<div class="section" id="effective-wind-power-generation-time">
+<h3>风电有效发电时间　effective wind power generation time</h3>
+<p>单个或多个风电场有功功率大于零的时间，单位为小时。</p>
+</div>
+<div class="section" id="wind-power-simultaneity-factor">
+<h3>风电同时率　wind power simultaneity factor</h3>
+<p>单个或多个风电场有功功率与额定容量的比率。</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>预测建模数据准备</h2>
+<div class="section" id="id6">
+<h3>风电场历史功率数据</h3>
+<ol class="arabic simple">
+<li>投运时间不足1年的风电场应包括投运后的所有历史功率数据，时间分辨率不小于5min；</li>
+<li>投运时间超过1年的风电场的历史功率数据应不少于1年，时间分辨率应不小于5min。</li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h3>历史测风塔数据</h3>
+<ol class="arabic simple">
+<li>测风塔位置宜在风电场5km范围内；</li>
+<li>应至少包括10m、70m及以上高程的风速和风向以及气温、气压等信息；</li>
+<li>应为最近两年内的数据，有效时长应不少于1年；</li>
+<li>数据的时间分辨率应不小于10min。</li>
+</ol>
+</div>
+<div class="section" id="id8">
+<h3>风电机组信息</h3>
+<p>风电机组信息应包括机组类型，每类风机的单机容量、轮毂高度、叶轮直径、功率曲线、推力系数曲线，每台风机的首次并网时间、风机位置（经、纬度）、海拔高度等。</p>
+</div>
+<div class="section" id="id9">
+<h3>风电机组/风电场运行状态记录</h3>
+<p>风电机组状态数据应包括风电机组故障和人为停机记录，风电场运行状态应包括风电场开机容量和限电记录风电机组故障及人为停机记录或风电场开机容量和限电记录。</p>
+</div>
+<div class="section" id="id10">
+<h3>地形和粗糙度数据</h3>
+<p>地形数据应包括对风电场区域内10km范围内地势变化的描述，格式宜为CAD文件，比例尺宜不小于1:5000。</p>
+<p>粗糙度数据应通过实地勘测或卫星地图获取，包括对风电场所处区域20km范围内粗糙度的描述。</p>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>数据采集与处理</h2>
+<div class="section" id="id12">
+<h3>数据采集范围</h3>
+<p>数据采集至少应包括测风塔实时测风数据、风电场实时功率数据和机组状态数据。</p>
+</div>
+<div class="section" id="id13">
+<h3>数据采集要求</h3>
+<ol class="arabic">
+<li><p class="first">所有数据的采集应能自动完成，并支持通过手动方式补充录入。</p>
+</li>
+<li><p class="first">测风塔实时测风数据时间延迟应小于5min，其余实时数据的时间延迟应小于1min。</p>
+</li>
+<li><p class="first">风电功率预测系统所用的测风塔实时测风数据应满足以下要求：</p>
+<blockquote>
+<div><ul class="simple">
+<li>测风塔至风电功率预测系统的实时测风数据传送时间间隔应不大于5min；</li>
+<li>测风塔宜在风电场外1~5km范围内且不受风电场尾流效应影响，宜在风电场主导风向的上风向，位置应具有代表性；</li>
+<li>采集量应至少包括10m、70m及轮毂高度的风速和风向以及气温、气压等信息，宜包括瞬时值和5min平均值；</li>
+<li>电网调度机构的风电功率预测系统所用的测风数据应通过电力调度数据网由风电场上传；</li>
+<li>风电场的测风塔至风电功率预测系统的数据传输应采用可靠的无线传输或光纤传输等方式；</li>
+<li>测风塔数据可用率应大于99％。</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">风电场实时功率数据的采集周期应不大于1min，其中：</p>
+<blockquote>
+<div><ul class="simple">
+<li>电网调度机构的风电功率预测系统的数据应取自所在安全区的基础数据平台；</li>
+<li>风电场风电功率预测系统的数据应取自风电场计算机监控系统。</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">风电机组状态数据的采集周期应不大于15min，应通过电力调度数据网由风电场计算机监控系统上传。</p>
+</li>
+</ol>
+</div>
+<div class="section" id="id14">
+<h3>数据的处理</h3>
+<ol class="arabic">
+<li><p class="first">所有数据存入数据库前应进行完整性及合理性检验，并对缺测和异常数据进行补充和修正。</p>
+</li>
+<li><p class="first">数据完整性检验应满足：</p>
+<blockquote>
+<div><ul class="simple">
+<li>数据的数量应等于预期记录的数据数量；</li>
+<li>数据的时间顺序应符合预期的开始、结束时间，中间应连续。</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">数据合理性检验应满足：</p>
+<blockquote>
+<div><ul class="simple">
+<li>对功率、数值天气预报、测风塔等数据进行越限检验，可手动设置限值范围；</li>
+<li>对功率的变化率进行检验，可手动设置变化率限值；</li>
+<li>对功率的均值及标准差进行检验；</li>
+<li>对测风塔不同层高数据进行相关性检验；</li>
+<li>根据测风数据与功率数据的关系对数据进行相关性检验。</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">缺测和异常数据应按下列要求处理：</p>
+<blockquote>
+<div><ul class="simple">
+<li>以前一时刻的功率数据补全缺测的功率数据；</li>
+<li>以装机容量替代大于装机容量的功率数据；</li>
+<li>以零替代小于零的功率数据；</li>
+<li>以前一时刻功率替代异常的功率数据；</li>
+<li>测风塔缺测及不合理数据以其余层高数据根据相关性原理进行修正；不具备修正条件的以前一时刻数据替代；</li>
+<li>数值天气预报缺测及不合理数据以前一时刻数据替代；</li>
+<li>所有经过修正的数据以特殊标示记录；</li>
+<li>所有缺测和异常数据均可由人工补录或修正。</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="id15">
+<h3>数据的存储</h3>
+<p>数据的存储应符合下列要求：</p>
+<blockquote>
+<div><ul class="simple">
+<li>存储系统运行期间所有时刻的数值天气预报数据；</li>
+<li>存储系统运行期间所有时刻的功率数据、测风塔数据，并将其转化为15min平均数据；</li>
+<li>存储每次执行的短期风电功率预测的所有预测结果；</li>
+<li>存储每15min滚动执行的超短期风电功率预测的所有预测结果；</li>
+<li>预测曲线经过人工修正后存储修正前后的所有预测结果；</li>
+<li>所有数据至少保存10年。</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>预测功能要求</h2>
+<div class="section" id="id17">
+<h3>总体要求</h3>
+<p>应根据风电场所处地理位置的气候特征和风电场历史数据情况，采用适当的预测方法构建特定的预测模型进行风电场的功率预测。根据预测时间尺度的不同和实际应用的具体需求，宜采用多种方法及模型，形成最优预测策略。</p>
+</div>
+<div class="section" id="id18">
+<h3>预测的空间要求</h3>
+<blockquote>
+<div><ul class="simple">
+<li>预测的基本单位为单个风电场。</li>
+<li>风电场的风电功率预测系统应能预测本风电场的输出功率。</li>
+<li>电网调度机构的风电功率预测系统应能预测单个风电场至整个调度管辖区域的风电输出功率。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id19">
+<h3>预测的时间要求</h3>
+<blockquote>
+<div><ul class="simple">
+<li>短期风电功率预测应能预测次日零时起3天的风电输出功率，时间分辨率为15min。</li>
+<li>超短期风电功率预测应能预测未来0-4h的风电输出功率，时间分辨率不小于15min。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id20">
+<h3>预测执行方式</h3>
+<blockquote>
+<div><ul class="simple">
+<li>短期风电功率预测应能够设置每日预测的启动时间及次数。</li>
+<li>短期风电功率预测应支持自动启动预测和手动启动预测。</li>
+<li>超短期风电功率预测应每15min自动执行一次。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id21">
+<h3>其他要求</h3>
+<blockquote>
+<div><ul class="simple">
+<li>应支持设备故障、检修等出力受限情况下的功率预测。</li>
+<li>应支持风电场扩建情况下的功率预测。</li>
+<li>应支持多源数值天气预报数据的集合预报。</li>
+<li>应能对风电功率预测曲线进行修正。</li>
+<li>应能对预测曲线进行误差估计，预测给定置信度的误差范围。</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id22">
+<h2>统计分析</h2>
+<div class="section" id="id23">
+<h3>数据统计</h3>
+<p>数据统计应符合以下要求：</p>
+<blockquote>
+<div><ul class="simple">
+<li>参与统计数据的时间范围应能任意选定；</li>
+<li>历史功率数据统计应包括数据完整性统计、分布特性统计、变化率统计等；</li>
+<li>历史测风数据、数值天气预报数据统计应包括完整性统计、风速分布统计、风向分布统计等；</li>
+<li>风电场运行参数统计应包括发电量、有效发电时间、最大出力及其发生时间、同时率、利用小时数及平均负荷率等参数的统计，并支持自动生成指定格式的报表，各参数的计算方法参见附录A。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id24">
+<h3>相关性分析</h3>
+<p>应能对历史功率数据、测风数据和数值天气预报数据进行相关性统计，分析数据的不确定性可能引入的误差。</p>
+</div>
+<div class="section" id="id25">
+<h3>误差统计</h3>
+<p>误差统计应符合以下要求：</p>
+<blockquote>
+<div><ul class="simple">
+<li>应能对任意时间区间的预测结果进行误差统计；</li>
+<li>应能对多个预测结果分别进行误差统计；</li>
+<li>误差统计指标至少应包括均方根误差、平均绝对误差、相关性系数、最大预测误差等，各指标的计算方法参见附录B。</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id26">
+<h2>界面要求</h2>
+<div class="section" id="id27">
+<h3>展示界面</h3>
+<blockquote>
+<div><ul class="simple">
+<li>应支持单个和多个风电场实时出力监视，以地图的形式显示，包括风电场的分布、风电场的实时功率及预测功率。</li>
+<li>应支持多个风电场出力的同步监视，宜同时显示系统预测曲线、实际功率曲线及预测误差带；电网调度机构的风电功率预测系统还应能够同时显示风电场上报预测曲线。实际功率曲线应实时更新。</li>
+<li>支持不同预测结果的同步显示。</li>
+<li>应支持数值天气预报数据、测风塔数据、实际功率、预测功率的对比，提供图形、表格等多种可视化手段。</li>
+<li>应支持时间序列图、风向玫瑰图、风廓线以及气温、气压、湿度变化曲线等气象图表展示。</li>
+<li>应支持统计分析数据的展示。</li>
+<li>监视数据更新周期应不大于5min。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id28">
+<h3>操作界面</h3>
+<blockquote>
+<div><ul class="simple">
+<li>应具备开机容量设置、调度控制设置及查询页面。</li>
+<li>应支持异常数据定义设置，支持异常数据以特殊标识显示。</li>
+<li>应支持预测曲线的人工修改。</li>
+<li>应具备系统用户管理功能，支持用户级别和权限设置，至少应包括系统管理员、运行操作人员、浏览用户等不同级别的用户权限。</li>
+<li>应支持风电场基本信息的查询。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id29">
+<h3>其他要求</h3>
+<blockquote>
+<div><ul class="simple">
+<li>应具备功率预测系统运行状态监视页面，实时显示系统运行状态。</li>
+<li>所有的表格、曲线应同时支持打印输出和电子表格输出。</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id30">
+<h2>安全防护要求</h2>
+<blockquote>
+<div><ul class="simple">
+<li>电网调度机构和风电场的风电功率预测系统均应运行于电力二次系统安全区Ⅱ。</li>
+<li>风电功率预测系统应满足电力二次系统安全防护规定的要求。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id31">
+<h2>数据输出</h2>
+<blockquote>
+<div><ul class="simple">
+<li>电网调度机构的风电功率预测系统至少应提供次日96点单个风电场和区域风电功率预测数据；每15min提供一次未来4h单个风电场风电功率预测数据，预测值的时间分辨率为15min。</li>
+<li>风电场的风电功率预测系统应根据调度部门的要求向调度机构的风电功率预测系统至少上报次日96点风电功率预测曲线；每15min上报一次未来4h超短期预测曲线，预测值的时间分辨率不小于15min。</li>
+<li>风电场的风电功率预测系统向调度机构上报风电功率预测曲线的同时，应上报与预测曲线相同时段的风电场预计开机容量。</li>
+<li>风电场的风电功率预测系统应能够向调度机构的风电功率预测系统实时上传风电场测风塔的测风数据，时间分辨率不小于5min。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id32">
+<h2>性能要求</h2>
+<blockquote>
+<div><ul class="simple">
+<li>电网调度机构的风电功率预测系统应至少可扩容至200个风电场。</li>
+<li>风电功率预测单次计算时间应小于5min。</li>
+<li>单个风电场短期预测月均方根误差应小于20％，超短期预测第4h预测值月均方根误差应小于15％，限电时段不参与统计。</li>
+<li>系统硬件平均无故障时间（MTBF）应大于100000h。</li>
+<li>系统月可用率应大于99％。</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="a">
+<h2>附录A 风电场运行参数统计方法</h2>
+<p><strong>风电同时率</strong></p>
+<p><div class="onlinemathnum" id="equ11">(1.1)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+'/></center></p><p><strong>平均负荷率</strong></p>
+<p><div class="onlinemathnum" id="equ12">(1.6)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+'/></center></p><p>式中：</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAQCAQAAABE8WxnAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhgAAAD8ABo5iaAAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAEVSURBVCjPlZJdcQMxDIQ/hcFREAVRuEJwIZhCC8GFcIGQQLhAiCHEEC4Q1Ic6Pied/Ekv0mgk
+7WolDoAMGL1lP/OCbbp4YqqRcZT0SjvenBNTiwNOdJ552y6KktvUM6DvgB+BQ8sUumHPwTNxavHQ
+E3nk4hfwJwo/dXMg+/cbl79iXvzjr1mS7HoFRGWWJGPNQgNPxNH/4Nhx7LIvlr62Xt4oXm6hibFf
+30ni1XHxz/XyY1/o1DiQxeqoshIUkyBW2280X23wM6Xqb364LBHFgAgbUUlMwHjnTQsGEtiLMniu
+Y7cEMjzQFCM4jMwY5hDZdZ+xXD3tHeZQUNQzYB3ByFZU4v3diYXkOMwOSmJhYmwSJpLzC6ANxRxK
+binyAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTA2LTA0VDE2OjEyOjU4KzA4OjAwKR/S4QAAACV0
+RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNi0wNFQxNjoxMjo1OCswODowMFhCal0AAAAfdEVYdHBzOkhp
+UmVzQm91bmRpbmdCb3gANTk2eDg0MiswKzAnuw12AAAAJ3RFWHRwczpMZXZlbABBZG9iZUZvbnQt
+MS4wOiBDTU1JMTAgMDAzLjAwMgo14kaGAAAAAElFTkSuQmCC
+'/> &#8212; <img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAANCAQAAAAgAtcAAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAiUAAAD9ALvGrJIAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AABgSURBVAjXTc1BFcIwAATRTxzEQizEAhZioRaiBQ1IqAUiAQsgYTnQPpjbHHZWRBj2KE4Wl/hR
+/BO66aYG1QwP12DTNNHiG572OOVpO0T3UnW9YLjnbWSV43uzHJumRnwA7e8o1/ibTNIAAAAldEVY
+dGRhdGU6Y3JlYXRlADIwMTQtMDYtMDRUMTY6MTI6NTgrMDg6MDApH9LhAAAAJXRFWHRkYXRlOm1v
+ZGlmeQAyMDE0LTA2LTA0VDE2OjEyOjU4KzA4OjAwWEJqXQAAAB90RVh0cHM6SGlSZXNCb3VuZGlu
+Z0JveAA1OTZ4ODQyKzArMCe7DXYAAAAndEVYdHBzOkxldmVsAEFkb2JlRm9udC0xLjA6IENNTUkx
+MCAwMDMuMDAyCjXiRoYAAAAASUVORK5CYII=
+'/> 时刻的实际功率；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAATCAQAAADLjr6zAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhoAAAD8AFfxKKsAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAELSURBVDjLlZNRdYQwEEXv7MFALMRCLMQCFqKhEkDCroRWAkgACSABJLx+BJaeZinbma/MyZ3k
+zHtjYg/z1DigVw8W1XMaph25M/PQCBaJOGa15xhCEFhIYk8SIhznMl9AAsfyF5Sxia4of15gJERd
+lOMVNlx96DWm8ovXeQPGQpXARdxeSOm5xCq+iktJH88GkZWZWStYxNMTcPRZtR9zo8FrN0GHwzER
+BZ6ahvtWEQQGGiKRRIN7NphyO4QTBEGXvXO8EUjE/Z2toqzgMeksFYGl2pw5lvMkb0BktMiq0ert
+TqKtTi0+2mw1HnAEtUBgtRrPqvY/zhiOrTDxXphjkf1a0zewBpj1yKdvm1kc0S+aYg8AAAAldEVY
+dGRhdGU6Y3JlYXRlADIwMTQtMDYtMDRUMTY6MTI6NTkrMDg6MDCPaNlVAAAAJXRFWHRkYXRlOm1v
+ZGlmeQAyMDE0LTA2LTA0VDE2OjEyOjU5KzA4OjAw/jVh6QAAAB90RVh0cHM6SGlSZXNCb3VuZGlu
+Z0JveAA1OTZ4ODQyKzArMCe7DXYAAAAndEVYdHBzOkxldmVsAEFkb2JlRm9udC0xLjA6IENNTUkx
+MCAwMDMuMDAyCjXiRoYAAAAASUVORK5CYII=
+'/> &#8212; 风电场的开机总容量；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAJCAQAAABObR6mAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAiIAAAEBAB8IWKwAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAB0SURBVAjXRcxBEYMwFATQl0wNxAIWYiEWYgELaKgFLGABC5HQSmgk/B6g09nLHnZfCmlTTLvN
+VO1xwmJVhC0EzSuErDs00w4K8IgnqTpiguqEDJr3tdINEBSh3vInqGpGM2PcrwM9Rv57GKTV+CEl
+XLFc/Quh5y/Dr8h/gQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wNi0wNFQxNjoxMjo1OSswODow
+MI9o2VUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDYtMDRUMTY6MTI6NTkrMDg6MDD+NWHpAAAA
+H3RFWHRwczpIaVJlc0JvdW5kaW5nQm94ADU5Nng4NDIrMCswJ7sNdgAAACd0RVh0cHM6TGV2ZWwA
+QWRvYmVGb250LTEuMDogQ01NSTEwIDAwMy4wMDIKNeJGhgAAAABJRU5ErkJggg==
+'/> &#8212; 所有样本个数。</p>
+</div>
+<div class="section" id="b">
+<h2>附录B 误差计算方法</h2>
+<p><strong>均方根误差</strong></p>
+<p><div class="onlinemathnum" id="equ12">(1.6)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+Mgo14kaGAAAAAElFTkSuQmCC
+'/></center></p><p><strong>平均绝对误差</strong></p>
+<p><div class="onlinemathnum" id="equ12">(1.6)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+NeJGhgAAAABJRU5ErkJggg==
+'/></center></p><p><strong>相关性系数</strong></p>
+<p><div class="onlinemathnum" id="equ12">(1.6)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+STEwIDAwMy4wMDIKNeJGhgAAAABJRU5ErkJggg==
+'/></center></p><p><strong>最大预测误差</strong></p>
+<p><div class="onlinemathnum" id="equ12">(1.6)</div><center><img class='onlinemath' 			src='data:image/png;base64,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
+MDAzLjAwMgo14kaGAAAAAElFTkSuQmCC
+'/></center></p><p>式中：</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAQCAQAAABE8WxnAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhgAAAD8ABo5iaAAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAEVSURBVCjPlZJdcQMxDIQ/hcFREAVRuEJwIZhCC8GFcIGQQLhAiCHEEC4Q1Ic6Pied/Ekv0mgk
+7WolDoAMGL1lP/OCbbp4YqqRcZT0SjvenBNTiwNOdJ552y6KktvUM6DvgB+BQ8sUumHPwTNxavHQ
+E3nk4hfwJwo/dXMg+/cbl79iXvzjr1mS7HoFRGWWJGPNQgNPxNH/4Nhx7LIvlr62Xt4oXm6hibFf
+30ni1XHxz/XyY1/o1DiQxeqoshIUkyBW2280X23wM6Xqb364LBHFgAgbUUlMwHjnTQsGEtiLMniu
+Y7cEMjzQFCM4jMwY5hDZdZ+xXD3tHeZQUNQzYB3ByFZU4v3diYXkOMwOSmJhYmwSJpLzC6ANxRxK
+binyAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTA2LTA0VDE2OjEzOjAyKzA4OjAwKk3o9QAAACV0
+RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNi0wNFQxNjoxMzowMiswODowMFsQUEkAAAAfdEVYdHBzOkhp
+UmVzQm91bmRpbmdCb3gANTk2eDg0MiswKzAnuw12AAAAJ3RFWHRwczpMZXZlbABBZG9iZUZvbnQt
+MS4wOiBDTU1JMTAgMDAzLjAwMgo14kaGAAAAAElFTkSuQmCC
+'/> &#8212; <img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAANCAQAAAAgAtcAAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAiUAAAD9ALvGrJIAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AABgSURBVAjXTc1BFcIwAATRTxzEQizEAhZioRaiBQ1IqAUiAQsgYTnQPpjbHHZWRBj2KE4Wl/hR
+/BO66aYG1QwP12DTNNHiG572OOVpO0T3UnW9YLjnbWSV43uzHJumRnwA7e8o1/ibTNIAAAAldEVY
+dGRhdGU6Y3JlYXRlADIwMTQtMDYtMDRUMTY6MTM6MDIrMDg6MDAqTej1AAAAJXRFWHRkYXRlOm1v
+ZGlmeQAyMDE0LTA2LTA0VDE2OjEzOjAyKzA4OjAwWxBQSQAAAB90RVh0cHM6SGlSZXNCb3VuZGlu
+Z0JveAA1OTZ4ODQyKzArMCe7DXYAAAAndEVYdHBzOkxldmVsAEFkb2JlRm9udC0xLjA6IENNTUkx
+MCAwMDMuMDAyCjXiRoYAAAAASUVORK5CYII=
+'/> 时刻的实际功率；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAQCAQAAABNGswdAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhoAAAD8AFfxKKsAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAD1SURBVCjPjZFRlYMwEEXv9KwBLMTCWEglxELWwkpgJVAJIKGVUCSABJAw+9EQcraB05mfx3Am
+uS9PDABpUMoabeWkLoXu6JJSntKerWG5meiyDhjROOp8mzgcYz5tBdwnkB545C8HxSHHkHRMWTcl
+cK3FNsiJmd90U2C0n7MX+SqcDWk22zVNW5SZVxQPSxYk2LBhRQz3DoOhGTukWW9UnBVLypL1nfY9
+AF+84l55Kg5lAFEJosnbv8z2UlbxgKfhaqM4lJXINzha7hh9CZHAlpezHdqgJxon2ZTOikQXw7YA
+qlXzG7mJw1+OdqQl0kis/Ip2+wMpcru/so5OBQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wNi0w
+NFQxNjoxMzowMyswODowMIw640EAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDYtMDRUMTY6MTM6
+MDMrMDg6MDD9Z1v9AAAAH3RFWHRwczpIaVJlc0JvdW5kaW5nQm94ADU5Nng4NDIrMCswJ7sNdgAA
+ACd0RVh0cHM6TGV2ZWwAQWRvYmVGb250LTEuMDogQ01NSTEwIDAwMy4wMDIKNeJGhgAAAABJRU5E
+rkJggg==
+'/> &#8212; <img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAANCAQAAAAgAtcAAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAiUAAAD9ALvGrJIAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AABgSURBVAjXTc1BFcIwAATRTxzEQizEAhZioRaiBQ1IqAUiAQsgYTnQPpjbHHZWRBj2KE4Wl/hR
+/BO66aYG1QwP12DTNNHiG572OOVpO0T3UnW9YLjnbWSV43uzHJumRnwA7e8o1/ibTNIAAAAldEVY
+dGRhdGU6Y3JlYXRlADIwMTQtMDYtMDRUMTY6MTM6MDMrMDg6MDCMOuNBAAAAJXRFWHRkYXRlOm1v
+ZGlmeQAyMDE0LTA2LTA0VDE2OjEzOjAzKzA4OjAw/Wdb/QAAAB90RVh0cHM6SGlSZXNCb3VuZGlu
+Z0JveAA1OTZ4ODQyKzArMCe7DXYAAAAndEVYdHBzOkxldmVsAEFkb2JlRm9udC0xLjA6IENNTUkx
+MCAwMDMuMDAyCjXiRoYAAAAASUVORK5CYII=
+'/> 时刻的预测功率；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAATCAQAAAAkTNWNAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhoAAAD5ACqG3O4AAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAEJSURBVCjPnZJdccQwDIQ/3ZRAKIiCKaQQQiEUWgguBBfCBcIFwhlCDCGBoL7YTi659E96kTQj
+7WolMYpJj9Yk2SenJsbf7fKPHl4yYIN7qEdbfocUCDly3MV/A2XVmQg17jB647lXJFGUWGctsNHy
+lF4LjDVT2Iw4o0dgqnGzpXr0eieZSHxklI5o7z9LrihDriV7zVWPktZ2UQKRsRDqMfRIhCv3TfbG
+vFXPkSztaYhjWI8ufZGqNLUb5VZrGYni8oBUjnJ5cqPVGltI+V7OxjL6IiqeALQnj5NwIB2DKI3F
+3RsdRHB0Bi03HM6g57p7o5ONIKGoRcDVFU5xPDPeMLgZKJ6ZQGsYX79nq84ZiMFFAAAAJXRFWHRk
+YXRlOmNyZWF0ZQAyMDE0LTA2LTA0VDE2OjEzOjA0KzA4OjAwSZ3dzwAAACV0RVh0ZGF0ZTptb2Rp
+ZnkAMjAxNC0wNi0wNFQxNjoxMzowNCswODowMDjAZXMAAAAfdEVYdHBzOkhpUmVzQm91bmRpbmdC
+b3gANTk2eDg0MiswKzAnuw12AAAAJnRFWHRwczpMZXZlbABBZG9iZUZvbnQtMS4wOiBDTVIxMCAw
+MDMuMDAyCulGDnYAAAAASUVORK5CYII=
+'/> &#8212; 所有样本实际功率的平均值；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAATCAQAAADRsl49AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhwAAAD5APzfP/MAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AADoSURBVCjPlZJhccMwDIU/7UogFExBFFIIoWAMg+BByCCsEBYINYQYQg1B+9FE57Vue336I+ns
+p6d3EmOHRIIXxb7pQIx38PHWaw7bkAH9189WX7HPzFumnCV16c2DldnzCSMat+HsEghkZ6nQ+NQR
+MwKLVwGaz/dimFk9H1phbbjvslL42pgnsn0+MzIQOG29YkffKKEUrqYutuzjI0bojcdQFzjtqyrF
+yv1wUaplAKsUdH8+Nq608L4ElNOh43kLpcoIjAwcLUMg8YvxQ+oov1yVN5s8DpTLgyN4rrx3kbeu
+JCKDxLb3ByaDlsgf24sGAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTA2LTA0VDE2OjEzOjA0KzA4
+OjAwSZ3dzwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNi0wNFQxNjoxMzowNCswODowMDjAZXMA
+AAAfdEVYdHBzOkhpUmVzQm91bmRpbmdCb3gANTk2eDg0MiswKzAnuw12AAAAJnRFWHRwczpMZXZl
+bABBZG9iZUZvbnQtMS4wOiBDTVIxMCAwMDMuMDAyCulGDnYAAAAASUVORK5CYII=
+'/> &#8212; 所有预测功率样本的平均值；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAATCAQAAADLjr6zAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAhoAAAD8AFfxKKsAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAELSURBVDjLlZNRdYQwEEXv7MFALMRCLMQCFqKhEkDCroRWAkgACSABJLx+BJaeZinbma/MyZ3k
+zHtjYg/z1DigVw8W1XMaph25M/PQCBaJOGa15xhCEFhIYk8SIhznMl9AAsfyF5Sxia4of15gJERd
+lOMVNlx96DWm8ovXeQPGQpXARdxeSOm5xCq+iktJH88GkZWZWStYxNMTcPRZtR9zo8FrN0GHwzER
+BZ6ahvtWEQQGGiKRRIN7NphyO4QTBEGXvXO8EUjE/Z2toqzgMeksFYGl2pw5lvMkb0BktMiq0ert
+TqKtTi0+2mw1HnAEtUBgtRrPqvY/zhiOrTDxXphjkf1a0zewBpj1yKdvm1kc0S+aYg8AAAAldEVY
+dGRhdGU6Y3JlYXRlADIwMTQtMDYtMDRUMTY6MTM6MDQrMDg6MDBJnd3PAAAAJXRFWHRkYXRlOm1v
+ZGlmeQAyMDE0LTA2LTA0VDE2OjEzOjA0KzA4OjAwOMBlcwAAAB90RVh0cHM6SGlSZXNCb3VuZGlu
+Z0JveAA1OTZ4ODQyKzArMCe7DXYAAAAndEVYdHBzOkxldmVsAEFkb2JlRm9udC0xLjA6IENNTUkx
+MCAwMDMuMDAyCjXiRoYAAAAASUVORK5CYII=
+'/> &#8212; 风电场的开机总容量；</p>
+<p><img class='inlinemath' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAJCAQAAABObR6mAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJb0ZG
+cwAAAiIAAAEBAB8IWKwAAAAJcEhZcwAAE/4AABP+AQeUOYQAAAAJdnBBZwAABDQAAAXwAGwB//cA
+AAB0SURBVAjXRcxBEYMwFATQl0wNxAIWYiEWYgELaKgFLGABC5HQSmgk/B6g09nLHnZfCmlTTLvN
+VO1xwmJVhC0EzSuErDs00w4K8IgnqTpiguqEDJr3tdINEBSh3vInqGpGM2PcrwM9Rv57GKTV+CEl
+XLFc/Quh5y/Dr8h/gQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wNi0wNFQxNjoxMzowNSswODow
+MO/q1nsAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDYtMDRUMTY6MTM6MDUrMDg6MDCet27HAAAA
+H3RFWHRwczpIaVJlc0JvdW5kaW5nQm94ADU5Nng4NDIrMCswJ7sNdgAAACd0RVh0cHM6TGV2ZWwA
+QWRvYmVGb250LTEuMDogQ01NSTEwIDAwMy4wMDIKNeJGhgAAAABJRU5ErkJggg==
+'/> &#8212; 所有样本个数。</p>
+</div>
+<div class="section" id="id33">
+<h2>编制说明</h2>
+<div class="section" id="id34">
+<h3>编制背景</h3>
+<p>大力发展风电等先进能源技术在改善能源结构、减少温室气体排放等方面具有非常积极的作用，然而，与常规电源相比，风电场的输出功率受人为因素干预较小，几乎完全由自然条件决定。随机变化的风速、风向导致风电场输出功率具有波动性、间歇性、随机性的特点，大量风电场集中并网会对电网的安全、稳定、经济运行带来影响，并成为了限制电网接纳风电的主要障碍之一。</p>
+<p>对风电场的输出功率进行预测被认为是提高电网调峰能力、增强电网接纳风电发电的能力、改善电力系统运行安全性与经济性的最有效、最经济的手段之一。通过预测，风电将从未知变为基本已知，调度运行人员可根据预测的波动情况，合理安排应对措施，提高电网的安全性和可靠性；而将功率预测与负荷预测相结合，还有利于调度运行人员调整和优化常规电源的发电计划，改善电网调峰能力，增加风电的并网容量；根据风电功率预测结果，只需增加对应预测误差的旋转备用容量，可以显著降低额外增加的旋转备用容量，对改善电力系统运行经济性，减少温室气体排放具有非常重要的意义，风电功率预测还可以增强风电在电力市场中的竞争力，提高上网电价。对发电企业来说，风电功率预测有助于发电企业合理安排检修计划、减少弃风，提高企业的盈利能力。</p>
+<p>本标准依据《关于下达2010年度国家电网公司技术标准编制（修）订计划的通知》（国家电网科〔2010〕320号）的要求编写。</p>
+</div>
+<div class="section" id="id35">
+<h3>编制主要原则</h3>
+<p>功能规范编制的原则是遵守现有相关法律、条例、标准和导则等，兼顾电网运行和风电发展的要求。下面列出和本标准相关的主要国家法律和条例的部分条款。</p>
+<p>（1）中华人民共和国可再生能源法修正案（修正案）</p>
+<p>第十四条　国家实行可再生能源发电全额保障性收购制度。国务院能源主管部门会同国家电力监管机构和国务院财政部门，按照全国可再生能源开发利用规划，确定在规划期内应当达到的可再生能源发电量占全部发电量的比重，制定电网企业优先调度和全额收购可再生能源发电的具体办法，并由国务院能源主管部门会同国家电力监管机构在年度中督促落实。</p>
+<p>电网企业应当与按照可再生能源开发利用规划建设，依法取得行政许可或者报送备案的可再生能源发电企业签订并网协议，全额收购其电网覆盖范围内符合并网技术标准的可再生能源并网发电项目的上网电量。发电企业有义务配合电网企业保障电网安全。</p>
+<p>电网企业应当加强电网建设，扩大可再生能源电力配置范围，发展和应用智能电网、储能等技术，完善电网运行管理，提高吸纳可再生能源电力的能力，为可再生能源发电提供上网服务。</p>
+<p>第二十九条　违反本法第十四条规定，电网企业未完成收购可再生能源电量的最低限额指标的，由国家电力监管机构责令限期改正；造成可再生能源发电企业经济损失的，应当承担赔偿责任；拒不改正的，处以可再生能源发电企业经济损失额一倍以下的罚款。</p>
+<p>（2）国家电网公司企业标准《风电场接入电网技术规定》（Q/GDW 392-2009）</p>
+</div>
+<div class="section" id="id36">
+<h3>与其它标准文件的关系</h3>
+<p>本功能规范制订时参考了调度自动化系统相关国家标准、行业标准和企业标准，包括《可再生能源法》、《风电场接入电网技术规定》、《风电调度运行管理规范》。其中《可再生能源法》从法律层面确定了国家对于风电开发利用的支持，同时指出发电企业有义务配合电网企业保障电网安全；《风电场接入电网技术规定》和《风电调度运行管理规范》要求风电场必须配备风电功率预测系统，并向调度机构上报短期和超短期预测功率，《风电调度运行管理规范》同时还提出电网调度机构应对风电场上报的预测期限进行考核。</p>
+<p>以上一系列法规、标准的出台和执行，有效地规范了电网运行和风电的开发利用，但是目前国内外尚无对应的文件对风电功率预测系统的建设进行规范，因此本功能规范是上述标准的重要补充。</p>
+</div>
+<div class="section" id="id37">
+<h3>主要工作过程</h3>
+<p>本项目的执行期为2010年1月至2010年12月，项目的实际启动时间为2009年7月。制订过程中结合实际调研数据，多次广泛征求意见，于2010年8月形成《风电功率预测功能规范》送审稿，并于2010年12月顺利通过送审稿专家评审会。</p>
+<p>（1）2009年7月，确立工作总体目标，确定参编单位及人员，开展课题前期研究工作。</p>
+<p>（2）2009年8月至9月，广泛调研各网省公司及风电场的具体应用需求，并详细查阅国内外在该领域的研究水平，确立了本功能规范的初步框架和内容。</p>
+<p>（3）2009年10月至12月，根据调研结果，结合我国其他相关标准中的要求，编写本功能规范的初稿。</p>
+<p>（4）2010年1月，在国网公司范围内广泛征求相关专家的意见并进行修改。</p>
+<p>（5）2010年2月，作为技术文件下发各网省公司（国家电网调〔2010〕201号），并收集意见。</p>
+<p>（6）2010年3至4月，根据讨论意见对功能规范初稿进行修订，形成征求意见稿。</p>
+<p>（7）2010年4月至6月，征求意见稿在网上进行公示，接受社会范围监督。</p>
+<p>（8）2010年7月，根据反馈意见对征求意见稿进行修改。</p>
+<p>（9）2010年8月，通过标准形式审查，形成送审稿。</p>
+<p>（10）2010年12月，组织专家对送审稿进行评审，按照修改意见修改后形成报批稿。</p>
+</div>
+<div class="section" id="id38">
+<h3>标准结构和内容</h3>
+<p>本标准依据GB/T 1.1－2000《标准化工作导则第1部分：标准的结构和编写规则》和DL/T 600－2001《电力行业标准编写基本规定》的编写要求进行标准编制。标准的主要结构和内容如下：</p>
+<ol class="arabic simple">
+<li>目次；</li>
+<li>前言；</li>
+<li>功能规范正文，共设11章：范围、规范性引用文件、术语和定义、预测建模数据准备、数据采集与处理、预测功能要求、统计分析、界面要求、安全防护要求、数据输出、性能要求；此外包括2个附录，分别列出了风电场运行参数及误差计算方法。</li>
+</ol>
+</div>
+<div class="section" id="id39">
+<h3>条文说明</h3>
+<p>本功能规范制定时主要考虑以下几方面：预测建模数据要求、数据采集与处理、预测功能要求、安全防护要求、性能指标等。</p>
+<div class="section" id="id40">
+<h4>预测建模数据要求</h4>
+<p>基础资料的质量直接影响预测效果，本部分对风电场预测模型构建所需的基础资料进行明确界定。风电场历史功率数据是建立统计模型的基础，一般来说，为了保证模型的泛化能力，至少需要一年的历史数据作为支撑；对于新建风电场，实际运行功率数据可对通过其他方法构建的模型进行修正。测风塔数据对于预测精度的提高非常重要，可根据测风塔数据对历史功率进行甄别筛选，剔除错误功率数据，同时可对数值天气预报数据进行修正。测风塔数据应能够反映风电场所处区域的风况，因此要求测风塔在风电场5km范围内，且时间区间尽量与历史功率数据同步；由于历史测风塔数据的存储周期一般为10min，因此对数据的时间分辨率并未提出更高的要求。在风电场历史功率不具备的情况下，可根据风电机组信息、地形和粗糙度数据建立风电功率预测的物理模型，以保证功率预测系统随风电场同步投运。</p>
+</div>
+<div class="section" id="id41">
+<h4>数据采集与处理</h4>
+<p>风电功率预测系统实时运行需要大量数据作支撑，包括测风塔实时测风数据、风电场实时功率数据和机组运行状态数据，本节对系统运行所需的数据及处理方式提出了明确的要求。预测系统需实时运行，因此所有数据采集应可自动完成，在出现网络故障时，数据应可以进行手动补录。考虑到系统运行的实时性，因此对数据的时效性提出了明确要求，即：测风塔数据的时间延迟小于5min，其余实时数据的时间延迟小于1min。实时测风塔数据对于超短期功率预测和短期预测结果的修正非常重要，数据应不受风电场尾流效应的影响，且能真实反映风电场所处区域的风况，因此风机机头处的测风设备是不满足应用要求的。根据理论计算，风电场外1-5km范围内的地区受尾流效应影响较小，因此建议实时测风塔安装在风电场外1-5km范围内，且位置应具有代表性。风电场功率预测系统和调度机构风电功率预测系统是同步运行的，因此风电场功率预测系统所需数据应同步上传至调度机构的风电功率预测系统。</p>
+<p>我国风电功率预测系统研究工作正在起步中，基础数据积累严重不足，且数据存储很不规范，为了便于模型再训练及后续工作的开展，本节对数据的处理及存储方式也提出了明确的要求，为后续工作的开展打下一定的数据基础。</p>
+</div>
+<div class="section" id="id42">
+<h4>预测功能要求</h4>
+<p>对调度部门而言，调度的最小单位为单个风电场，同时区域风电总的预测结果对调度部门更有意义，因此本节对预测的空间要求做出明确要求，即预测的最小单元为单个风电场，电网调度机构的风电功率预测系统能预测单个风电场和整个调度管辖区的风电输出功率。在时间方面，短期预测主要用于发电计划的制定，应与发电计划的时间要求一致，因此需提供96点预测曲线，即时间分辨率为15分钟，主要解决电网的调峰问题；各网省公司的调度部门一般在周五制定未来3天的发电计划，因此需提供次日零时起3天的风电输出功率。超短期预测每15分钟执行一次，需自动滚动执行，主要用于解决电网的调频问题。</p>
+<p>在设备故障、机组检修、风电场扩容等由于外部原因导致风机运行容量变化时，系统需根据当时运行容量对预测结果进行修正，系统必须具备对特殊情况下风电场输出功率进行预测的能力。集合预报可提高预测精度，系统需具备使用多源数值天气预报进行集合预报的能力。风电功率预测难度较大，相对负荷预测来说其误差偏大，为了更好地使用风电功率预测系统，必须对预测结果进行评估，估计特定置信度的误差范围，以提高系统的使用效果。</p>
+</div>
+<div class="section" id="id43">
+<h4>安全防护要求</h4>
+<p>风电功率预测系统作为调度技术支持系统之一，必须完全满足电力二次系统安全防护规定的要求。从功能上来说，风电功率预测主要用于发电计划的制定，属调度计划类应用，因此应部署于安全区Ⅱ。</p>
+</div>
+<div class="section" id="id44">
+<h4>性能指标</h4>
+<p>风电功率预测系统正逐步成为各风电大省不可或缺的调度技术支持系统之一，因此对系统的稳定性、可靠性和准确性都提出了更高的要求。</p>
+<p>中国风电发展迅速，根据中国可再生能源工业协会预测，到2015年，全国风电总装机将超过50GW，电网调度机构的风电功率预测系统必须将调度管辖区内所有已建风电场全部纳入预测系统，以保证系统的应用效果，因此系统应可扩容至200个风电场。系统的预测精度直接影响使用效果，对于误差大于20％点基本不可用，因此本规范提出了短期预测月均方根误差应小于20％，超短期预测月均方根误差小于15％的误差评估指标。限电对风电场实际功率的影响较大，若限电时段参与误差统计将带来很大的不确定性，因此规定限电时段将不参与误差统计。</p>
+</div>
+</div>
+</div>
+</div>
+
+

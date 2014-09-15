@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project name="Manger" default="deploy" basedir="."> 
+<property name="destdir" value="/home/laojing/Tomcat/Forecast/"/>	
+<target name="compile">
+	<javac srcdir="Source" destdir="Object" encoding="UTF-8" includeantruntime="on">	
+		<classpath>
+			<fileset dir="Library"/>
+			<fileset dir="/usr/share/tomcat7/lib"/>
+		</classpath>
+	</javac>
+</target>
+ 	
+<target name="deploy" depends="compile">
+	<native2ascii src="Resource/WEB-INF" includes="*.properties" dest="Object" />
+	<copy todir="${destdir}images">
+		<fileset dir="Resource/Images"/>
+	</copy>
+	<copy todir="${destdir}scripts">
+		<fileset dir="Script"/>
+	</copy> 
+	<copy todir="${destdir}styles">
+		<fileset dir="Style"/>
+	</copy> 
+	<copy todir="${destdir}WEB-INF\Html">
+		<fileset dir="Html"/>
+	</copy> 
+	<copy todir="${destdir}WEB-INF\classes">
+		<fileset dir="Object"/>
+	</copy> 
+	<copy todir="${destdir}WEB-INF\jsp">
+		<fileset dir="Jsp"/>
+	</copy> 
+	<copy todir="${destdir}WEB-INF\lib">
+		<fileset dir="Library"/>
+	</copy> 
+	<copy todir="${destdir}WEB-INF">
+		<fileset dir="Resource/WEB-INF"/>
+	</copy>
+</target>	
+ 
+</project> 

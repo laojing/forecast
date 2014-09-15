@@ -1,0 +1,15 @@
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+	".tiles-config_2_1.dtd">
+
+<tiles-definitions>
+	<definition name="template" template="/WEB-INF/jsp/main.jsp">
+		<put-attribute name="header" value="/WEB-INF/jsp/top.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/foot.jsp" />
+	</definition>
+
+	<definition name="index" extends="template">
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+</tiles-definitions>
